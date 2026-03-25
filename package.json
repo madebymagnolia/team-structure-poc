@@ -1,0 +1,8 @@
+{
+  "name": "team-structure-poc",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@netlify/neon": "^2.0.0"
+  }
+}

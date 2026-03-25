@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Team Structure POC</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 800px;
+        margin: 40px auto;
+        padding: 0 16px;
+      }
+      .person {
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+      .muted {
+        color: #666;
+        font-size: 14px;
+      }
+      button {
+        padding: 8px 12px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Team Structure POC</h1>
+    <p class="muted">Very basic proof of concept using Netlify Functions + Netlify DB.</p>
+
+    <button id="loadBtn">Load people</button>
+    <div id="app" style="margin-top: 16px;">Press “Load people”</div>
+
+    <script>
+      async function loadPeople() {
+        const app = document.getElementById("app");
+        app.innerHTML = "Loading...";
+
+        try {
+          const res = await fetch("/.netlify/functions/people");
+          const data = await res.json();
+
+          if (!Array.isArray(data)) {
+            app.innerHTML = "<p>Something went wrong.</p>";
+            return;
+          }
+
+          app.innerHTML = data.map(person => `
+            <div class="person">
+              <strong>${person.name}</strong><br>
+              <span>${person.role}</span><br>
+              <span class="muted">Manager ID: ${person.manager_id ?? "None"}</span>
+            </div>
+          `).join("");
+        } catch (err) {
+          app.innerHTML = `<p>Failed to load: ${err.message}</p>`;
+        }
+      }
+
+      document.getElementById("loadBtn").addEventListener("click", loadPeople);
+    </script>
+  </body>
+</html>

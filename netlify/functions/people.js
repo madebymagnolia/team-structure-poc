@@ -1,6 +1,6 @@
-import { neon } from "@netlify/neon";
+import { neon } from "@neondatabase/serverless";
 
-const sql = neon();
+const sql = neon(process.env.NETLIFY_DATABASE_URL);
 
 export default async () => {
   try {
@@ -35,6 +35,7 @@ export default async () => {
       status: 200,
       headers: { "content-type": "application/json" }
     });
+
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
